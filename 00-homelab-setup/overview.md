@@ -1,45 +1,55 @@
-## Home Lab Overview
+# Homelab overview
 
-The Host is running on Windows 10 with virtual networks connected on NAT network so I can access other host.
-
-
-### Common diagram types
-
-- `Kali Linux` - (Use for Defense and Offense practice / attack simulation / security testing)
-- `Windows 7` - (Use for attack simulations)
-- `Metasploitable 2` (intentionally vulnerable system)
+The host is running on Windows 10 with all VMs connected on a NAT network so they can communicate with each other but are isolated from my home network.
 
 ---
-### Network Design
+
+## Machines
+
+- **Kali Linux** - Used for both offense and defense. Runs Nmap, Metasploit, Wireshark, Snort, and Wazuh Manager.
+- **Windows 7** - Unpatched target for exploitation (EternalBlue). Runs Wazuh agent for monitoring.
+- **Metasploitable 2** - Intentionally vulnerable Linux machine. Multiple exploitable services (Samba, vsftpd, Telnet). Forwards syslog to Wazuh.
+
+---
+
+## Network design
+
 ```mermaid
 flowchart TD
+    Host["Windows 10 Host"]
 
-    Host[Windows 10 Host]
-
-    subgraph Lab["NAT Network (Homelab)"]
-        Kali[Kali Linux]
-        Win7[Windows 7]
-        Meta[Metasploitable 2]
+    subgraph Lab["NAT Network 10.0.2.0/24"]
+        Kali["Kali Linux<br/>10.0.2.4<br/>Attacker / Defender / SIEM"]
+        Win7["Windows 7<br/>10.0.2.6<br/>Target + Wazuh Agent"]
+        Meta["Metasploitable 2<br/>10.0.2.3<br/>Target + Syslog"]
     end
 
     Host --> Lab
 
-    Kali --> Win7
-    Kali --> Meta
+    Kali -->|attacks & monitors| Win7
+    Kali -->|attacks & monitors| Meta
+    Win7 -->|logs| Kali
+    Meta -->|syslog| Kali
 ```
----
-### Tools Used
-- Kali Linux
-- Basic OSINT tools
-- Nmap
-- Metasploit
-- Wireshark
-- Virtualization platforms (VirtualBox)
 
 ---
 
-### Key Skills Developed
+## Tools used
 
-- Learned basic fundamentals Planning &rarr; Scanning &rarr; Exploitation &rarr; Post-Exploitation &rarr; Reporting
-- Awareness of common system vulnerabilities
-- Learned offensive perspective
+**Offensive:** Nmap, Metasploit, Meterpreter, searchsploit, OpenVAS, theHarvester, Sherlock
+
+**Defensive:** Snort IDS, Wazuh SIEM, iptables/UFW, Wireshark, auditd
+
+**Other:** VirtualBox, Python, Bash, Git
+
+---
+
+## Skills developed
+
+- Penetration testing workflow: planning, scanning, exploitation, post-exploitation, reporting
+- Network traffic analysis and packet inspection
+- IDS rule writing and tuning
+- SIEM deployment and log correlation
+- Firewall configuration and network hardening
+- Incident investigation using NIST IR framework
+- Security automation with Python

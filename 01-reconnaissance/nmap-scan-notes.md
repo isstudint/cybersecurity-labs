@@ -1,60 +1,59 @@
-# Nmap Reconnaissance
+# Nmap reconnaissance
 
-I Nmap was used to scan both target machines  Metasploitable 2 and Windows 7. The goal was to identify open ports, running services, and potential attack vectors before moving to exploitation.
+Nmap was used to scan both target machines - Metasploitable 2 and Windows 7. The goal was to find open ports, running services, and potential attack paths before moving to exploitation.
 
-In general I use Nmap to 
+**MITRE ATT&CK:** T1046 (Network Service Discovery)
 
 ---
 
 ## Scanning Metasploitable 2
 
-### Basic Service Scan
+### Service scan
 
 ```bash
-nmap -sV 10.0.2.0/24 and found the metasolpitable on 10.0.2.3
+nmap -sV 10.0.2.0/24
 ```
 
-Identified a wide range of open ports typical of Metasploitable — FTP, SSH, Telnet, HTTP, Samba, and more.
+Ran a subnet scan first to find live hosts. Metasploitable showed up at `10.0.2.3` with a lot of open ports - FTP, SSH, Telnet, HTTP, Samba, and more. Most of these are intentionally misconfigured or outdated, which is the whole point of the machine.
 
-### Key Findings
+### Findings
 
-| Port | Service | Version (Nmap) | Notes |
+| Port | Service | Version | Notes |
 |---|---|---|---|
-| 21 | FTP | vsftpd 2.3.4 | Known backdoor |
-| 23 | Telnet | — | Open, no auth needed |
-| 139/445 | Samba | 3.x - 4.x | Version too vague  needed further enumeration |
-| 6200 | — | — | Related to vsftpd backdoor trigger |
+| 21 | FTP | vsftpd 2.3.4 | Known backdoor (CVE-2011-2523) |
+| 23 | Telnet | - | Open, no auth needed |
+| 139/445 | Samba | 3.x - 4.x | Version too vague, needed further enumeration |
+| 6200 | - | - | Related to vsftpd backdoor trigger |
 
 ---
 
-## Samba Version — Nmap Wasn't Enough
+## Samba version - Nmap wasn't enough
 
-Nmap returned a vague Samba version range (`3.x - 4.x`), which wasn't specific enough to find an exploit directly. Used a Metasploit auxiliary scanner to get the exact version.
+Nmap returned a vague Samba version range (`3.x - 4.x`), which wasn't specific enough to find an exploit. I didn't want to guess and run through every 3.x to 4.x exploit, so I used a Metasploit auxiliary scanner to get the exact version.
 
 ```bash
 msfconsole
 use auxiliary/scanner/smb/smb_version
-set RHOSTS 192.168.x.x
+set RHOSTS 10.0.2.3
 run
 ```
 
-**Result:** Samba `3.0.20` — confirmed exploitable via `trans2open`.
+Result: Samba `3.0.20`. That confirmed it was exploitable via `usermap_script` (CVE-2007-2447).
 
 ---
 
 ## Scanning Windows 7
 
 ```bash
-nmap -sV --script vuln 10.0.2.3
+nmap -sV --script vuln 10.0.2.6
 ```
 
-Nmap flagged the machine as potentially vulnerable to **MS17-010 (EternalBlue)** — SMB Remote Code Execution.
+Nmap's vuln scripts flagged the machine as vulnerable to MS17-010 (EternalBlue). SMB port 445 was open and the system was running an unpatched version of Windows 7.
 
 This confirmed the attack path before touching Metasploit.
 
 ---
 
 ## Takeaway
-In general its a network scanner that discovers hosts and services on a computer network by sending packets and analyzing responses
 
-Nmap gives you the map. It won't always give you exact versions or confirm exploitability  that's what auxiliary scanners and searchsploit are for. The Samba case was a good example of knowing when to go deeper.
+Nmap is a network scanner that discovers hosts and services by sending packets and analyzing responses. It gives you the map, but it won't always give you exact versions or confirm whether something is actually exploitable. The Samba case was a good example - Nmap got me close, but I needed the auxiliary scanner to get a specific enough version to actually find the right exploit. Knowing when to go deeper matters more than the initial scan.
