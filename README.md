@@ -4,7 +4,24 @@ Personal cybersecurity lab built on VirtualBox. I use this to practice both offe
 
 All findings and processes are documented here.
 
-**Certifications:** ISC2 CC · Google Cybersecurity · Cisco NetAcad (Network Defense, Cyber Threat Management, Intro to Cybersecurity)
+**Certifications**
+
+![ISC2 CC](https://img.shields.io/badge/ISC2-Certified%20in%20Cybersecurity-0052CC?style=flat-square&logo=isc2&logoColor=white)
+![Google Cybersecurity](https://img.shields.io/badge/Google-Cybersecurity%20Certificate-4285F4?style=flat-square&logo=google&logoColor=white)
+![Cisco Network Defense](https://img.shields.io/badge/Cisco-Network%20Defense-1BA0D7?style=flat-square&logo=cisco&logoColor=white)
+![Cisco Cyber Threat Management](https://img.shields.io/badge/Cisco-Cyber%20Threat%20Management-1BA0D7?style=flat-square&logo=cisco&logoColor=white)
+![Cisco Intro to Cybersecurity](https://img.shields.io/badge/Cisco-Intro%20to%20Cybersecurity-1BA0D7?style=flat-square&logo=cisco&logoColor=white)
+
+**Skills**
+
+![SIEM](https://img.shields.io/badge/SIEM-Wazuh-6C3483?style=flat-square)
+![IDS/IPS](https://img.shields.io/badge/IDS%2FIPS-Snort-E74C3C?style=flat-square)
+![Threat Analysis](https://img.shields.io/badge/Threat%20Analysis-Wireshark%20%7C%20Nmap-2ECC71?style=flat-square)
+![Incident Response](https://img.shields.io/badge/Incident%20Response-NIST%20Framework-F39C12?style=flat-square)
+![Vulnerability Assessment](https://img.shields.io/badge/Vuln%20Assessment-OpenVAS%20%7C%20CVSS-E67E22?style=flat-square)
+![Firewalls](https://img.shields.io/badge/Firewalls-iptables%20%7C%20UFW-3498DB?style=flat-square)
+![Python](https://img.shields.io/badge/Automation-Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![Linux](https://img.shields.io/badge/OS-Linux%20Administration-FCC624?style=flat-square&logo=linux&logoColor=black)
 
 ---
 
